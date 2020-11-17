@@ -1,4 +1,6 @@
 //app.js
+import Watcher from "./helper/watcher";
+
 App({
     onLaunch: function () {
       this.observe(this.globalData.responsiveData)
@@ -6,7 +8,8 @@ App({
     globalData: {
         responsiveData: {
             count: 0
-        }
+        },
+        watchers:[]
     },
     
     
@@ -14,24 +17,49 @@ App({
         Object.keys(data).map(key => {
 
             let value = data[key]
-            
             if (typeof value == 'object') {
                 this.observe(value)
             }
-            
+            let that=this
             Object.defineProperty(data, key, {
+                
                 get() {
-                    console.log(`oh,you1 read the value of ${key}`);
+                    
+                    
+                    
+                    
+                    
+                    setTimeout(()=> {
+                        if (Watcher.target) {
+                            that.globalData.watchers.push(Watcher.target)
+                            Watcher.target = null
+                        }
+                    },0)
+
                     return value
                 },
                 set(newValue) {
-                    console.log(`oh,you1 change the value of ${key}`);
+                    
+                    
+                    
+    
+                    let oldValue=value
                     value = newValue
+                    
+                    
+                    setTimeout(()=>{
+                        that.globalData.watchers.map(watcher=>{
+                            
+                            watcher.update(key,oldValue,newValue)
+                        })
+                    })
+                    
+
+                    
                 },
                 enumerable: true,
                 configurable: true
             })
         })
     }
-    
 })

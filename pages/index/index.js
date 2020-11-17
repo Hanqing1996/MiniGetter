@@ -6,10 +6,18 @@ Page({
     count:-1
   },
   onLoad: function () {
-    getter(this.data.count,app.globalData.responsiveData.count)
+    getter.call(this,'count')
+    
+    
   
-    console.log(app.globalData.responsiveData.count);
-  
-    app.globalData.responsiveData.count=2
+    
+    
+    
+    
+    
+    
+  },
+  addCount:function () {
+    app.globalData.responsiveData.count+=10
   }
 })
